@@ -1,4 +1,10 @@
+const operators = ["CLEAR",  "÷", "x", "+", "-", "=", "."]
+const numericContainer = document.getElementById('numeric-container')
+const operatorContainer = document.getElementById('operator-container')
+const paragraph = document.getElementById('display')
+
 let firstNum, secondNum, operator;
+let displayValue;
 
 function add(a, b) {
     return a + b
@@ -31,30 +37,43 @@ function operate(a, b, func) {
     }
 }
 
-const numericContainer = document.getElementById('numeric-container')
+const displayText = input => {
+    document.body.addEventListener('click',  (event)  => {
+      updateDisplay(event, input)
+      event.preventDefault()
+    })
+  }
+  
+  function updateDisplay(event, input) {
+    if(event.target.id === input.toString()) {
+      
+      if(paragraph.textContent == "0") {
+        display.textContent = event.target.id
+        displayValue = event.target.id
+      } else {
+        display.textContent += event.target.id
+        displayValue += event.target.id
+      }
+      
+    }
+  }
 
-const createNumericButtons = () => {
-    for(let i = 0; i < 10; i++) {
+const createButtons = () => {
+    for(let i = 9; i >= 0; i--) {
         let button = document.createElement('button')
         button.id = `${i}`
         button.textContent = `${i}`
-        // button.click()
+        button.click(displayText(i))
         numericContainer.appendChild(button)
     }
-}
 
-const operators = ["+", "-", "÷", "x"]
-const operatorContainer = document.getElementById('operator-container')
-
-const createOperatorButtons = () => {
     for(let symbol of operators) {
         let button = document.createElement('button')
         button.id = `${symbol}`
         button.textContent = `${symbol}`
-        operatorContainer.appendChild(button)
+        symbol == "." ? numericContainer.appendChild(button) : operatorContainer.appendChild(button)
     }
 }
 
 
-document.body.addEventListener("load", createNumericButtons(), false)
-document.body.addEventListener("load", createOperatorButtons(), false)
+document.body.addEventListener("load", createButtons(), false)
