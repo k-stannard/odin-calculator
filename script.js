@@ -77,6 +77,9 @@ const runOperation = input => {
                     setVariables("-")
                     break;
                 case "=":
+                    if(secondNum == undefined) {
+                        break
+                    }
                     console.log("eval clicked")
                     console.log("2# = " + secondNum + ". 1# = " + firstNum + ". res = " + result)
                     console.log(operate(parseInt(secondNum), parseInt(firstNum), operator))
