@@ -3,8 +3,7 @@ const numericContainer = document.getElementById('numeric-container')
 const operatorContainer = document.getElementById('operator-container')
 const paragraph = document.getElementById('display')
 
-let firstNum, secondNum, operator;
-let displayValue;
+let firstNum, secondNum, operator, result;
 
 function add(a, b) {
     return a + b
@@ -39,24 +38,69 @@ function operate(a, b, func) {
 
 const displayText = input => {
     document.body.addEventListener('click',  (event)  => {
-      updateDisplay(event, input)
+        let target = event.target.id
+        if(target === input.toString()) {
+            if(paragraph.textContent == "0") {
+                paragraph.textContent = target
+                firstNum = target
+            } else {
+                paragraph.textContent += target
+                firstNum += target
+            }
+
+            console.log(firstNum)
+        }
+        
+
       event.preventDefault()
     })
-  }
-  
-  function updateDisplay(event, input) {
-    if(event.target.id === input.toString()) {
-      
-      if(paragraph.textContent == "0") {
-        display.textContent = event.target.id
-        displayValue = event.target.id
-      } else {
-        display.textContent += event.target.id
-        displayValue += event.target.id
-      }
-      
-    }
-  }
+}
+
+const runOperation = input => {
+    document.body.addEventListener('click', (event) => {
+        let target = event.target.id
+        if(target === input.toString()) {
+            switch(target) {
+                case "CLEAR":
+                    resetCalculator()
+                    break;
+                case "÷":
+                    setVariables("/")
+                    break;
+                case "x":
+                    setVariables("*")
+                    break;
+                case "+":
+                    setVariables("+")
+                    break;
+                case "-":
+                    setVariables("-")
+                    break;
+                case "=":
+                    console.log("eval clicked")
+                    console.log("2# = " + secondNum + ". 1# = " + firstNum + ". res = " + result)
+                    console.log(operate(parseInt(secondNum), parseInt(firstNum), operator))
+                    result = operate(parseInt(secondNum), parseInt(firstNum), operator)
+                    paragraph.textContent = result
+                    break;
+                default:
+                    break
+            }
+        }
+    })
+}
+
+function setVariables(op) {
+    operator = op
+    secondNum = firstNum
+    firstNum = ""
+    paragraph.textContent = operator
+
+    if(result != undefined) secondNum = result
+
+    console.log("variables set")
+    console.log("2# = " + secondNum + ". 1# = " + firstNum + ". result = " + result)
+}
 
 const createButtons = () => {
     for(let i = 9; i >= 0; i--) {
@@ -71,9 +115,21 @@ const createButtons = () => {
         let button = document.createElement('button')
         button.id = `${symbol}`
         button.textContent = `${symbol}`
+        button.click(runOperation(symbol))
         symbol == "." ? numericContainer.appendChild(button) : operatorContainer.appendChild(button)
     }
 }
 
 
 document.body.addEventListener("load", createButtons(), false)
+
+
+function resetCalculator() {
+    console.log("reset click")
+    display.textContent = "0"
+    displayValue = ""
+    firstNum = ""
+    secondNum = ""
+    operator = ""
+    result = undefined
+}
