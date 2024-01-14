@@ -3,7 +3,7 @@ const numericContainer = document.getElementById('numeric-container')
 const operatorContainer = document.getElementById('operator-container')
 const paragraph = document.getElementById('display')
 
-let firstNum, secondNum, operator, result;
+let firstNum, secondNum, operator, result, previousOperator;
 
 function add(a, b) {
     return a + b
@@ -48,7 +48,7 @@ const displayText = input => {
                 firstNum += target
             }
 
-            console.log(firstNum)
+            console.log(firstNum, secondNum, result)
         }
         
 
@@ -77,15 +77,15 @@ const runOperation = input => {
                     setVariables("-")
                     break;
                 case "=":
-                    if(secondNum == undefined) {
-                        break
-                    }
-                    console.log("eval clicked")
-                    console.log("2# = " + secondNum + ". 1# = " + firstNum + ". res = " + result)
-                    console.log(operate(parseInt(secondNum), parseInt(firstNum), operator))
-                    result = operate(parseInt(secondNum), parseInt(firstNum), operator)
+                    if(secondNum == undefined) break
+                    setVariables("=")
                     paragraph.textContent = result
                     break;
+                case ".":
+                    if(!firstNum.includes(".")) {
+                        firstNum += "."
+                        paragraph.textContent += "."
+                    }
                 default:
                     break
             }
@@ -94,15 +94,33 @@ const runOperation = input => {
 }
 
 function setVariables(op) {
-    operator = op
-    secondNum = firstNum
-    firstNum = ""
+    if(op != "=") {
+        if(operator == undefined) {
+            operator = op
+        } else {
+            previousOperator = operator
+            operator = op
+        }
+    } 
+
     paragraph.textContent = operator
 
-    if(result != undefined) secondNum = result
+    if(firstNum != "" && secondNum != undefined) {
+        if(op != "=") {
+            secondNum = operate(parseFloat(secondNum), parseFloat(firstNum), previousOperator)
+            result = operate(parseFloat(secondNum), parseFloat(firstNum), operator)
+            firstNum = ""
+        } else {
+            result = operate(parseFloat(secondNum), parseFloat(firstNum), operator)
+            secondNum = result
+            firstNum = ""
+        }
+    }
 
-    console.log("variables set")
-    console.log("2# = " + secondNum + ". 1# = " + firstNum + ". result = " + result)
+    if(secondNum == undefined) {
+        secondNum = firstNum
+        firstNum = ""
+    }
 }
 
 const createButtons = () => {
@@ -132,7 +150,8 @@ function resetCalculator() {
     display.textContent = "0"
     displayValue = ""
     firstNum = ""
-    secondNum = ""
-    operator = ""
+    secondNum = undefined
+    operator = undefined
+    previousOperator = undefined
     result = undefined
 }
