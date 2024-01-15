@@ -3,7 +3,7 @@ const numericContainer = document.getElementById('numeric-container')
 const operatorContainer = document.getElementById('operator-container')
 const paragraph = document.getElementById('display')
 
-let firstNum, secondNum, operator, result, previousOperator;
+let firstNum, secondNum, currentOperator, previousOperator, result;
 
 function add(a, b) {
     return a + b
@@ -93,25 +93,25 @@ const runOperation = input => {
     })
 }
 
-function setVariables(op) {
-    if(op != "=") {
-        if(operator == undefined) {
-            operator = op
+function setVariables(operator) {
+    if(operator != "=") {
+        if(currentOperator == undefined) {
+            currentOperator = operator
         } else {
-            previousOperator = operator
-            operator = op
+            previousOperator = currentOperator
+            currentOperator = operator
         }
     } 
 
-    paragraph.textContent = operator
+    paragraph.textContent = currentOperator
 
     if(firstNum != "" && secondNum != undefined) {
-        if(op != "=") {
+        if(operator != "=") {
             secondNum = operate(parseFloat(secondNum), parseFloat(firstNum), previousOperator)
-            result = operate(parseFloat(secondNum), parseFloat(firstNum), operator)
+            result = operate(parseFloat(secondNum), parseFloat(firstNum), currentOperator)
             firstNum = ""
         } else {
-            result = operate(parseFloat(secondNum), parseFloat(firstNum), operator)
+            result = operate(parseFloat(secondNum), parseFloat(firstNum), currentOperator)
             secondNum = result
             firstNum = ""
         }
@@ -141,17 +141,15 @@ const createButtons = () => {
     }
 }
 
-
-document.body.addEventListener("load", createButtons(), false)
-
-
 function resetCalculator() {
     console.log("reset click")
     display.textContent = "0"
     displayValue = ""
     firstNum = ""
     secondNum = undefined
-    operator = undefined
+    currentOperator = undefined
     previousOperator = undefined
     result = undefined
 }
+
+document.body.addEventListener("load", createButtons(), false)
