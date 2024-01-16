@@ -1,4 +1,6 @@
-const operators = ["CLEAR",  "÷", "x", "+", "-", "=", "."]
+const operators = ["÷", "x", "+", "-", "=", "."]
+const editButtons = ["CLEAR", "DEL"]
+const editContainer = document.getElementById('edit-container')
 const numericContainer = document.getElementById('numeric-container')
 const operatorContainer = document.getElementById('operator-container')
 const paragraph = document.getElementById('display')
@@ -63,6 +65,8 @@ const runOperation = input => {
             switch(target) {
                 case "CLEAR":
                     resetCalculator()
+                    break;
+                case "DEL":
                     break;
                 case "÷":
                     setVariables("/")
@@ -138,6 +142,14 @@ const createButtons = () => {
         button.textContent = `${symbol}`
         button.click(runOperation(symbol))
         symbol == "." ? numericContainer.appendChild(button) : operatorContainer.appendChild(button)
+    }
+
+    for(let name of editButtons) {
+        let button = document.createElement('button')
+        button.id = `${name}`
+        button.textContent = `${name}`
+        button.click(runOperation(name))
+        editContainer.appendChild(button)
     }
 }
 
