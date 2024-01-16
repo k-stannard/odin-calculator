@@ -67,6 +67,7 @@ const runOperation = input => {
                     resetCalculator()
                     break;
                 case "DEL":
+                    deleteInput()
                     break;
                 case "÷":
                     setVariables("/")
@@ -155,13 +156,18 @@ const createButtons = () => {
 
 function resetCalculator() {
     console.log("reset click")
-    display.textContent = "0"
-    displayValue = ""
+    paragraph.textContent = "0"
     firstNum = ""
     secondNum = undefined
     currentOperator = undefined
     previousOperator = undefined
     result = undefined
+}
+
+function deleteInput() {
+    firstNum = firstNum.slice(0, -1)
+    paragraph.textContent = firstNum
+    if(paragraph.textContent == "") paragraph.textContent = "0"
 }
 
 document.body.addEventListener("load", createButtons(), false)
