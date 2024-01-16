@@ -45,15 +45,12 @@ const displayText = input => {
             if(paragraph.textContent == "0") {
                 paragraph.textContent = target
                 firstNum = target
-            } else {
+            } else if(firstNum.length < 11) {
                 paragraph.textContent += target
                 firstNum += target
             }
-
-            console.log(firstNum, secondNum, result)
         }
         
-
       event.preventDefault()
     })
 }
@@ -84,6 +81,7 @@ const runOperation = input => {
                 case "=":
                     if(secondNum == undefined) break
                     setVariables("=")
+                    if(result.toString().length > 11) result = result.toExponential(4)
                     paragraph.textContent = result
                     break;
                 case ".":
