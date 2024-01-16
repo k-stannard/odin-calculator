@@ -81,6 +81,7 @@ const runOperation = input => {
                 case "=":
                     if(secondNum == undefined) break
                     setVariables("=")
+                    if(firstNum == "" && secondNum == undefined) break
                     if(result.toString().length > 11) result = result.toExponential(4)
                     paragraph.textContent = result
                     break;
@@ -114,6 +115,11 @@ function setVariables(operator) {
             result = operate(parseFloat(secondNum), parseFloat(firstNum), currentOperator)
             firstNum = ""
         } else {
+            if(firstNum == "0" && currentOperator == "/") {
+                alert("Error: cannot divide by zero")
+                resetCalculator()
+                return
+            }
             result = operate(parseFloat(secondNum), parseFloat(firstNum), currentOperator)
             secondNum = result
             firstNum = ""
